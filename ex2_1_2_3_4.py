@@ -66,16 +66,40 @@ class Trie:
         _dfs(self.root, "", words)
         return words
 
+    def suggestions_rec(self, node, word):
+        if node.is_end_of_word:
+            print(word)
+        for a, n in node.children.items():
+            self.suggestions_rec(n, word + a)
+    
+    def print_auto_suggestions(self, key):
+        node = self.root
+
+        for a in key:
+            if not node.children.get(a):
+                return 0
+            node = node.children[a]
+            
+        if not node.children:
+            return -1
+
+        self.suggestions_rec(node, key)
+        return 1
+
 trie = Trie()
-trie.insert("carro")
 trie.insert("casa")
-trie.insert("carteira")
-trie.insert("car")
+trie.insert("casamento")
+trie.insert("casulo")
+trie.insert("cachorro")
 
 print(trie.list_words())
-print(trie.search("carro"))
-print(trie.search("caro"))
-print(trie.starts_with("car"))
-print(trie.starts_with("scar"))
-trie.delete("carro")
+
+print(trie.search("casa"))
+
+trie.print_auto_suggestions("cas")
+
+trie.delete("casa")
+
 print(trie.list_words())
+
+trie.print_auto_suggestions("cas")
